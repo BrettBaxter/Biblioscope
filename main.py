@@ -1,0 +1,28 @@
+import easyocr
+import cv2
+from matplotlib import pyplot as plt
+import numpy as np
+
+# Load the image and use OCR to parse text.
+IMAGE_PATH = 'images/front/single_book_cover_good_contrast_1.jpeg'
+# Start with english, spanish, and french.
+reader = easyocr.Reader(['en','es','fr'], gpu=False)
+# Use OCR to detect text in image.
+result = reader.readtext(IMAGE_PATH)
+
+# Get the image.
+img = cv2.imread(IMAGE_PATH)
+
+# Loop through each detection result and mark it down.
+for detection in result:
+    top_left = tuple([int(val) for val in detection[0][0]])
+    bottom_right = tuple([int(val) for val in detection[0][2]])
+    text = detection[1]
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    img = cv2.rectangle(img, top_left, bottom_right, (0,255,0), 5)
+    img = cv2.putText(img, text, top_left, font, 1, (255,255,255), 2, cv2.LINE_AA)
+
+# Display the plot.
+plt.figure(figsize=(10,10))
+plt.imshow(img)
+plt.show()
