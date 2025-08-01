@@ -33,7 +33,7 @@ for detection in result:
     font = cv2.FONT_HERSHEY_SIMPLEX
     img = cv2.rectangle(img, top_left, bottom_right, (0,255,0), 5)
     img = cv2.putText(img, text, top_left, font, 1, (255,255,255), 2, cv2.LINE_AA)
-    print(text)
+    print(f"[{text}], Confidence: {detection[2] * 100:.2f}%")
 
 # Display the plot.
 plt.figure(figsize=(10,10))
