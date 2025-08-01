@@ -3,15 +3,27 @@ import cv2
 from matplotlib import pyplot as plt
 import numpy as np
 
-# Load the image and use OCR to parse text.
+# Load the image.
 IMAGE_PATH = 'images/front/single_book_cover_good_contrast_1.jpeg'
+image = cv2.imread(IMAGE_PATH)
+
 # Start with english, spanish, and french.
 reader = easyocr.Reader(['en','es','fr'], gpu=False)
+
+# -------------- Pre-processing -------------------
+
+# convert image to grayscale.
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+# -------------- Perform OCR ----------------------
+
 # Use OCR to detect text in image.
-result = reader.readtext(IMAGE_PATH)
+result = reader.readtext(gray)
+
+# -------------- Output Visual --------------------
 
 # Get the image.
-img = cv2.imread(IMAGE_PATH)
+img = gray.copy()
 
 # Loop through each detection result and mark it down.
 for detection in result:
@@ -21,6 +33,7 @@ for detection in result:
     font = cv2.FONT_HERSHEY_SIMPLEX
     img = cv2.rectangle(img, top_left, bottom_right, (0,255,0), 5)
     img = cv2.putText(img, text, top_left, font, 1, (255,255,255), 2, cv2.LINE_AA)
+    print(text)
 
 # Display the plot.
 plt.figure(figsize=(10,10))
